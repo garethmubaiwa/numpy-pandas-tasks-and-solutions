@@ -1,12 +1,12 @@
 import numpy as np
 
-rng = np.random.default_rng(seed = 1)
+rng = np.random.default_rng()
 import random
 import math
 
 # Given a random array, change the sign of elements whose values ​​are between 3 and 8
 a1 = rng.integers(1, 20, 10)
-mask = (3<a1) & (a1<14)
+mask = (3<a1) & (a1<8)
 a1 = np.where(mask , -a1, a1)
 print('Array after changing signs:',a1)
 
@@ -25,26 +25,28 @@ xy = np.array([np.concatenate((X,Y)) for X in x for Y in y]) #meshgrid and stack
 print('Direct product of arrays:', xy)
 
 # Given two arrays, A (8x3) and B (2x2), find rows in A that contain elements from each row in B, regardless of the order of the elements in B.
-A = rng.integers(0, 10, size=(8,3))
-B = rng.integers(0, 10, size=(2,2))
+np.random.seed(78)
+A = np.random.randint(0, 10, size = (8, 3))
+print(f"Array A: \n{A}")
+np.random.seed(99)
+B = np.random.randint(0, 10, size = (2, 2))
+print(f"Array B: \n{B}")
 
-print('A:\n', A)
-print('B:\n', B)
+match0 = np.isin(A, B[0]).sum(axis=1) == 2
+match1 = np.isin(A, B[1]).sum(axis=1) == 2
 
-match0 = np.isin(A, B[0]).any(axis=1)
-match1 = np.isin(A, B[1]).any(axis=1)
-
-matched = np.where((match0 & match1))[0]
+matched = np.where(match0 | match1)[0]
 print('row indices:\n', matched)
 row = A[matched]
 print('row values: \n', row)
 
 # Given a 10x3 matrix, find rows of unequal values ​​(for example, row [2,2,3] remains, row [3,3,3] is removed)
-A = rng.integers(0,10, size=(10,3))
-print('Original matrix:\n',A)
-mask = np.any(A != A[:, [0]], axis=1) #differences
-#mask = ~(A == A[:, [0]]).all(axis=1) #equal value
-print('Changed matrix:\n',A[mask])
+rng = np.random.default_rng(42)
+A = rng.integers(0, 10, size=(10,3))
+print("Original matrix:\n", A)
+
+mask = (A.max(axis=1) != A.min(axis=1))
+print("Rows with unequal values:\n", A[mask])
 
 # Given a two-dimensional array, remove the rows that are repeated.
 a = np.array([[1,2,3],[3,5,6],[0,1,3],[8,4,6],[1,2,3],[0,1,3],[4,7,2],[8,1,0],[9,3,9],[9,9,9]])
@@ -52,11 +54,10 @@ print('a: \n',a)
 unique_row= np.unique(a, axis=0)
 print('Unique_row: \n', unique_row)
 
-''' For each of the following problems (1-5), you need to provide two implementations - one without using numpy (assume that where the input or output should be numpy arrays, there will be just lists), 
+# For each of the following problems (1-5), you need to provide two implementations - one without using numpy (assume that where the input or output should be numpy arrays, there will be just lists), 
 # and the second fully vectorized one using numpy (without using Python loops/map/list comprehension).
 # Note 1. You can assume that all the specified objects are non-empty (for example, in problem 1, there are non-zero elements on the diagonal of the matrix). 
-# Note 2. For most problems, the solution takes no more than 1-2 lines.'''
-
+# Note 2. For most problems, the solution takes no more than 1-2 lines.
 # Problem 1: Calculate the product of nonzero elements on the diagonal of a rectangular matrix. For example, for X = np.array([[1, 0, 1], [2, 0, 2], [3, 0, 3], [4, 4, 4]]) the answer is 3
 x = np.array([[1, 0, 1], [2, 0, 2], [3, 0, 3], [4, 4, 4]])
 #without numpy
@@ -122,10 +123,10 @@ from scipy.spatial.distance import cdist
 dist_matrix = cdist(X, Y, metric='euclidean')
 print('Euclidean Distance (scipy):\n',dist_matrix)
 
-'''Problem 6: CrunchieMunchies * 
-- You work in the marketing department of MyCrunch, a food company that is developing a new type of delicious, healthy cereal called CrunchieMunchies. 
-- You want to demonstrate to consumers how healthy your cereal is compared to other leading brands, so you have collected nutrition data from several different competitors. 
-- Your task is to use Numpy calculations to analyze this data and prove that your Crunchie Munchies are the healthiest choice for consumers.'''
+#Problem 6: CrunchieMunchies * 
+#- You work in the marketing department of MyCrunch, a food company that is developing a new type of delicious, healthy cereal called CrunchieMunchies. 
+#- You want to demonstrate to consumers how healthy your cereal is compared to other leading brands, so you have collected nutrition data from several different competitors. 
+#- Your task is to use Numpy calculations to analyze this data and prove that your Crunchie Munchies are the healthiest choice for consumers.
 
 # View the cereal.csv file. This file contains calorie counts for various brands of cereal. Download the data from the file and save it as calorie_stats.
 calorie_stats = np.loadtxt("cereal.csv", delimiter=",")

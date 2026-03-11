@@ -80,23 +80,25 @@ average_hours_by_country_salary = df.groupby(['native-country', 'salary'])['hour
 print('Average hours worked by country and salary:')
 print(average_hours_by_country_salary)
 
-'''11. Group people by age groups: young, adult, and retired, 
-where:
-young corresponds to 16-35 years old
-adult - 35-70 years old
-retiree - 70-100 years old
-Enter the name of the corresponding group for each person in the new AgeGroup column.'''
+#11. Group people by age groups: young, adult, and retired, 
+#where:
+#young corresponds to 16-35 years old
+#adult - 35-70 years old
+#retiree - 70-100 years old
+#Enter the name of the corresponding group for each person in the new AgeGroup column.
 def age_group(age):
-    if 16 <= age < 35:
+    if 16 <= age <= 35:
         return 'young'
-    elif 35 <= age < 70:
+    elif 35 < age <= 70:
         return 'adult'
-    elif 70 <= age <= 100:
+    elif 70 < age <= 100:
         return 'retiree'
+    else:
+        return 'unknown'
 
 df['AgeGroup'] = df['age'].apply(age_group)
 print('Data with AgeGroup column:')
-print(df['AgeGroup'].head())
+print(df[['age', 'AgeGroup']].head())
 
 # 12-13. Determine the number of people earning >50K in each age group (AgeGroup column), 
 # and also display the name of the age group in which people most often earn more than 50K (>50K).
@@ -117,5 +119,6 @@ def filter_func(group):
 
 filtered_groups = group.filter(filter_func)
 print('Filtered groups where average age is 40 or less and all workers work more than 5 hours per week:')
-print(filtered_groups['occupation'].unique())
+print(sorted(filtered_groups['occupation'].unique()))
+
 
